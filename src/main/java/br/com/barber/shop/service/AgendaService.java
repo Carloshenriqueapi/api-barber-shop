@@ -12,7 +12,7 @@ public class AgendaService {
     private final AgendaRepository agendaRepository; {
 }
 @Autowired
-public AgendaService(AgendaRepository agendaRepository, AgendaRepository agendaRepository1) {
+public AgendaService(AgendaRepository agendaRepository) {
     this.agendaRepository = agendaRepository;
 }
 public List<Agenda> listarTodos() {
