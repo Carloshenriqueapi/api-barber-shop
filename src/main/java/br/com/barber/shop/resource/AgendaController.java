@@ -2,7 +2,6 @@ package br.com.barber.shop.resource;
 
 import br.com.barber.shop.entity.Agenda;
 import br.com.barber.shop.service.AgendaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +12,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/agenda")
 
-public class AgendaResource {
+public class AgendaController {
     private final AgendaService agendaService;
 
-    public AgendaResource(AgendaService agendaService) {
+    public AgendaController(AgendaService agendaService) {
         this.agendaService = agendaService;
     }
     @GetMapping

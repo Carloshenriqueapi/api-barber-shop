@@ -12,15 +12,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Servico {
-
+public class ServicoCategoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long idBarbearia;
-    private Long idProfissional;
-    private Long idServicoCategoria;
-    private String nome;
-    private Double valor;
-    private Boolean ativo;
+    private String servico;
+
 }
