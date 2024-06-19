@@ -1,7 +1,7 @@
 package br.com.barber.shop.service;
 
 import br.com.barber.shop.entity.BarbeariaCadastro;
-import br.com.barber.shop.repository.BarbeariaRepository;
+import br.com.barber.shop.repository.BarbeariaCadastroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BarbeariaService {
+public class BarbeariaCadastroService {
     @Autowired
-    private BarbeariaRepository barbeariaRepository;
+    private BarbeariaCadastroRepository barbeariaRepository;
 
     public List<BarbeariaCadastro> getAllBarbearia() {
         return barbeariaRepository.findAll();

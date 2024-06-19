@@ -1,7 +1,7 @@
 package br.com.barber.shop.resource;
 
 import br.com.barber.shop.entity.BarbeariaCadastro;
-import br.com.barber.shop.service.BarbeariaService;
+import br.com.barber.shop.service.BarbeariaCadastroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
 @RequestMapping("/api/barbearia")
-public class BarbeariaController {
+public class BarbeariaCadastroController {
     @Autowired
-    private BarbeariaService barbeariaService;
+    private BarbeariaCadastroService barbeariaService;
 
     @GetMapping
     public List<BarbeariaCadastro> getAllBarbearia() {

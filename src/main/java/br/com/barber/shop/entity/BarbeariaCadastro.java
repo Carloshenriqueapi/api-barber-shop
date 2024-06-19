@@ -1,13 +1,23 @@
 package br.com.barber.shop.entity;
 
-import java.util.function.LongFunction;
-
+import jakarta.persistence.*;
+import lombok.Data;
+@Data
+@Entity
 public class BarbeariaCadastro {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String razaoSocial;
     private String nomeFantasia;
     private String cnpj;
-    private String endereco;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private BarbeariaEndereco endereco;
+
     private String email;
     private String telefone;
 }
