@@ -17,8 +17,10 @@ public class Servico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private BarbeariaCadastro barbearia;
-    private ServicoCategoria servicoCategoria;
+
+    //private BarbeariaCadastro barbearia;
+
+    //private ServicoCategoria servicoCategoria;
     private String nome;
     private Double valor;
     private Boolean ativo;

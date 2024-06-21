@@ -1,6 +1,7 @@
 package br.com.barber.shop.core.service;
 
 import br.com.barber.shop.infrastructure.api.payload.request.BarbeariaCadastroRequest;
+import br.com.barber.shop.infrastructure.api.payload.response.BarbeariaCadastroResponse;
 import br.com.barber.shop.infrastructure.converter.BarbeariaCadastroConverter;
 import br.com.barber.shop.infrastructure.database.entity.BarbeariaCadastro;
 import br.com.barber.shop.infrastructure.database.repository.BarbeariaCadastroRepository;
@@ -17,18 +18,23 @@ import java.util.Optional;
 public class BarbeariaCadastroService {
 
     private final BarbeariaCadastroRepository barbeariaRepository;
+
     private final BarbeariaCadastroConverter barbeariaCadastroConverter;
 
-    public List<BarbeariaCadastro> getAllBarbearia() {
-        return barbeariaRepository.findAll();
+    public List<BarbeariaCadastroResponse> getAllBarbearia() {
+        return this.barbeariaCadastroConverter.applyResponse(barbeariaRepository.findAll());
     }
 
-    public Optional<BarbeariaCadastro> getBarbeariaById(Long id) {
-        return barbeariaRepository.findById(id);
+    public Optional<BarbeariaCadastroResponse> getBarbeariaById(Long id) {
+        return Optional.of(this.barbeariaCadastroConverter.applyResponse(barbeariaRepository.findById(id).get()));
     }
 
-    public BarbeariaCadastro createBarbearia(final BarbeariaCadastroRequest barbearia) {
-        return barbeariaRepository.save(this.barbeariaCadastroConverter.apply(barbearia));
+    public BarbeariaCadastroResponse createBarbearia(final BarbeariaCadastroRequest barbearia) {
+        return this.barbeariaCadastroConverter.applyResponse(
+                barbeariaRepository.save(
+                        this.barbeariaCadastroConverter.apply(barbearia)
+                )
+        );
     }
 
     public void deleteBarbearia(Long id) {

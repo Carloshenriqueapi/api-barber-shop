@@ -1,8 +1,9 @@
 package br.com.barber.shop.infrastructure.api.resources;
 
 import br.com.barber.shop.infrastructure.api.payload.request.BarbeariaCadastroRequest;
-import br.com.barber.shop.infrastructure.database.entity.BarbeariaCadastro;
+import br.com.barber.shop.infrastructure.api.payload.response.BarbeariaCadastroResponse;
 import br.com.barber.shop.core.service.BarbeariaCadastroService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,24 +11,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
 @RequestMapping("/api/barbearia")
+@AllArgsConstructor
 public class BarbeariaCadastroController {
-    @Autowired
-    private BarbeariaCadastroService barbeariaService;
+
+    private final BarbeariaCadastroService barbeariaService;
 
     @GetMapping
-    public List<BarbeariaCadastro> getAllBarbearia() {
+    public List<BarbeariaCadastroResponse> getAllBarbearia() {
         return  barbeariaService.getAllBarbearia();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BarbeariaCadastro> getBarbeariaById(@PathVariable Long id) {
+    public ResponseEntity<BarbeariaCadastroResponse> getBarbeariaById(@PathVariable Long id) {
         return barbeariaService.getBarbeariaById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public BarbeariaCadastro createBarbearia(@RequestBody BarbeariaCadastroRequest barbearia) {
+    public BarbeariaCadastroResponse createBarbearia(@RequestBody BarbeariaCadastroRequest barbearia) {
         return barbeariaService.createBarbearia(barbearia);
     }
 

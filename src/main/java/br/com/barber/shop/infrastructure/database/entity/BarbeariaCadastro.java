@@ -1,11 +1,17 @@
 package br.com.barber.shop.infrastructure.database.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Builder
-@Entity
-public class BarbeariaCadastro {
+@Entity(name = "barbearia_cadastro")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class BarbeariaCadastro implements Serializable {
 
 
     @Id

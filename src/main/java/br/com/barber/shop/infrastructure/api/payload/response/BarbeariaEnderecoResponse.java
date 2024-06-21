@@ -1,6 +1,6 @@
-package br.com.barber.shop.infrastructure.api.payload.request;
+package br.com.barber.shop.infrastructure.api.payload.response;
 
-public record BarbeariaEnderecoRequest(
+public record BarbeariaEnderecoResponse(
         String rua,
         String bairro,
         String cidade,

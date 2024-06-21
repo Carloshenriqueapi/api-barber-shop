@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Profissional {
 
         @Id
@@ -28,5 +27,4 @@ public class Profissional {
         private String telefone;
         private String endereco;
 
-    // verificar a questão da String endereço / endereço endereço .
 }
