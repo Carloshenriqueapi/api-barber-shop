@@ -4,7 +4,6 @@ import br.com.barber.shop.infrastructure.api.payload.request.BarbeariaCadastroRe
 import br.com.barber.shop.infrastructure.api.payload.response.BarbeariaCadastroResponse;
 import br.com.barber.shop.core.service.BarbeariaCadastroService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

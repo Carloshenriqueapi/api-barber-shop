@@ -6,7 +6,7 @@ import lombok.*;
 import java.io.Serializable;
 
 @Builder
-@Entity(name = "barbearia_cadastro")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
