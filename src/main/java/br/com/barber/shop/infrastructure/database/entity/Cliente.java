@@ -3,8 +3,6 @@ package br.com.barber.shop.infrastructure.database.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Entity
 @Builder
 @Getter
@@ -19,11 +17,18 @@ public class Cliente {
 
     private String nome;
     private String sobreNome;
-    private LocalDate dataNascimento;
-    private String rg;
+    private String dataNascimento;
     private String cpf;
+    private String rg;
+    private String sexo;
     private String email;
-    private Character sexo;
     private String telefone;
-    private String endereco;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private ClienteEndereco endereco;
+
 }
+
+
+
+

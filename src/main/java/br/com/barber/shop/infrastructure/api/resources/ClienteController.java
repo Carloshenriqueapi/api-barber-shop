@@ -2,6 +2,7 @@ package br.com.barber.shop.infrastructure.api.resources;
 
 import br.com.barber.shop.infrastructure.database.entity.Cliente;
 import br.com.barber.shop.core.service.ClienteService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +11,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cliente")
+@AllArgsConstructor
 
 public class ClienteController {
-    @Autowired
-    private ClienteService clienteService;
+
+    private final ClienteService clienteService;
 
     @GetMapping
     public List<Cliente> getAllCliente() {
