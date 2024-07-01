@@ -33,8 +33,8 @@ public class BarbeariaCadastroController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBarbearia(@PathVariable Long id) {
-        barbeariaService.deleteBarbearia(id);
+    public ResponseEntity<Void> deleteBarbeariaAgenda(@PathVariable Long id) {
+        deleteBarbeariaAgenda(id);
         return ResponseEntity.ok().build();
     }
 }

@@ -11,21 +11,18 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BarbeariaCadastro implements Serializable {
-
+public class BarbeariaAgenda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String razaoSocial;
-    private String nomeFantasia;
-    private String cnpj;
-
     @OneToOne(cascade = CascadeType.ALL)
-    private BarbeariaEndereco endereco;
+    private BarbeariaAgenda agenda;
 
+    private String dia;
+    private String mes;
+    private String hora;
+    private String ano;
 
-    private String email;
-    private String telefone;
 }

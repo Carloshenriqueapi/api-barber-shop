@@ -27,6 +27,7 @@ public class Cliente {
     @OneToOne(cascade = CascadeType.ALL)
     private ClienteEndereco endereco;
 
+
 }
 
 

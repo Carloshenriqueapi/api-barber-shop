@@ -20,6 +20,7 @@ public class BarbeariaServico  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private String nome;
     private Double valor;
     private Boolean ativo;
