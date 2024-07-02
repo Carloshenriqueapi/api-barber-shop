@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Builder
 @Entity
@@ -25,6 +26,8 @@ public class BarbeariaCadastro implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private BarbeariaEndereco endereco;
 
+    @OneToMany(mappedBy = "barbearia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BarbeariaServico> servicos;
 
     private String email;
     private String telefone;

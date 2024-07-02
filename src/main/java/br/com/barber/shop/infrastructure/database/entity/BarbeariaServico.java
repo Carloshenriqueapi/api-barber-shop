@@ -1,10 +1,7 @@
 package br.com.barber.shop.infrastructure.database.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -20,9 +17,11 @@ public class BarbeariaServico  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String nome;
     private Double valor;
     private Boolean ativo;
 
+    @ManyToOne
+    @JoinColumn(name = "barbearia_id", nullable = false)
+    private BarbeariaCadastro barbearia;
 }
