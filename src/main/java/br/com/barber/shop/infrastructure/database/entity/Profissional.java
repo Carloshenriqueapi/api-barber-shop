@@ -19,12 +19,17 @@ public class Profissional {
 
         private String nome;
         private String sobreNome;
-        private LocalDate dataNascimento;
+        private String dataNascimento;
         private String rg;
         private String cpf;
         private String email;
-        private Character sexo;
+        private String sexo;
         private String telefone;
         private String endereco;
+        private String bairro;
+        private String cidade;
+        private String cep;
+        private String numeroResidencia;
+        private String uf;
 
 }

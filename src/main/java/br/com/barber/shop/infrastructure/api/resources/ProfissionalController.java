@@ -1,8 +1,10 @@
 package br.com.barber.shop.infrastructure.api.resources;
 
+import br.com.barber.shop.core.service.ProfissionaisService;
+import br.com.barber.shop.infrastructure.api.payload.request.ProfissionalRequest;
+import br.com.barber.shop.infrastructure.api.payload.response.ProfissionalResponse;
 import br.com.barber.shop.infrastructure.database.entity.Profissional;
-import br.com.barber.shop.core.service.ProfissionalService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,27 +13,29 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/profissionais")
+@AllArgsConstructor
 public class ProfissionalController {
 
-    @Autowired
-    private ProfissionalService profissionalService;
+    private final ProfissionaisService profissionalService;
+
     @GetMapping
-    public List<Profissional> getAllProfissionais() {
-        return profissionalService.getAllProfissionais();
+    public ResponseEntity<List<ProfissionalResponse>> getAllProfissional() {
+        List<ProfissionalResponse> profissionais = profissionalService.getAllProfissional();
+        return ResponseEntity.ok(profissionais);
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Profissional> getProfissionalById(@PathVariable Long id) {
-        Optional<Profissional> profissional = profissionalService.getProfissionalById(id);
-        if (profissional.isPresent()) {
-            return ResponseEntity.ok(profissional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ProfissionalResponse> getProfissionalById(@PathVariable Long id) {
+        Optional<ProfissionalResponse> profissional = profissionalService.getProfissionalById(id);
+        return profissional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     @PostMapping
-    public Profissional createProfissional(@RequestBody Profissional profissional) {
-        return profissionalService.createProfissional(profissional);
+    public ResponseEntity<ProfissionalResponse> createProfissional(@RequestBody ProfissionalRequest profissionalRequest) {
+        ProfissionalResponse profissionalResponse = profissionalService.createProfissional(profissionalRequest);
+        return ResponseEntity.ok(profissionalResponse);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProfissional(@PathVariable Long id) {
         profissionalService.deleteProfissional(id);
