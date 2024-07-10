@@ -2,13 +2,18 @@ package br.com.barber.shop.infrastructure.api.payload.response;
 
 public record BarbeariaAgendaResponse (
 
+        Long id,
         String dia,
-        String mes,
         String hora,
-        String ano){
+        String mes,
+        String ano,
+        Long profissionalId,
+        Long servicoId){
+
 
 
 }
+
 
 
 

@@ -17,6 +17,9 @@ public class Profissional {
         @Column(name = "id")
         private Long id;
 
+        @Column(name = "id_barbearia_cadastro")
+        private Long idBarbeariaCadastro;
+
         private String nome;
         private String sobreNome;
         private String dataNascimento;

@@ -17,6 +17,7 @@ public class ProfissionalConverter implements Function<ProfissionalRequest, Prof
     @Override
     public Profissional apply(ProfissionalRequest pessoa) {
         return Profissional.builder()
+                .idBarbeariaCadastro(pessoa.idBarbearia())
                 .nome(pessoa.nome())
                 .sobreNome(pessoa.sobreNome())
                 .dataNascimento(pessoa.dataNascimento())
@@ -30,15 +31,17 @@ public class ProfissionalConverter implements Function<ProfissionalRequest, Prof
                 .build();
     }
 
-    public List<ProfissionalResponse> applyResponse(List<Profissional> list) {
-        if (list != null && !list.isEmpty()) {
-            return list.stream().map(this::applyResponse).collect(Collectors.toList());
-        }
-        return null;
+
+    public List<ProfissionalResponse> convertToResponseList(List<Profissional> profissionais) {
+        return profissionais.stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
     }
 
-    public ProfissionalResponse applyResponse(Profissional profissional) {
+    public ProfissionalResponse convertToResponse(Profissional profissional) {
         return new ProfissionalResponse(
+                profissional.getId(),
+                profissional.getIdBarbeariaCadastro(),
                 profissional.getNome(),
                 profissional.getSobreNome(),
                 profissional.getDataNascimento(),
@@ -47,14 +50,12 @@ public class ProfissionalConverter implements Function<ProfissionalRequest, Prof
                 profissional.getEmail(),
                 profissional.getSexo(),
                 profissional.getTelefone(),
-                new ProfissionalEnderecoResponse(
-                        profissional.getEndereco(),
-                        profissional.getBairro(),
-                        profissional.getCidade(),
-                        profissional.getCep(),
-                        profissional.getNumeroResidencia(),
-                        profissional.getUf()
-                )
+                profissional.getEndereco(),
+                profissional.getBairro(),
+                profissional.getCidade(),
+                profissional.getCep(),
+                profissional.getNumeroResidencia(),
+                profissional.getUf()
         );
     }
 }

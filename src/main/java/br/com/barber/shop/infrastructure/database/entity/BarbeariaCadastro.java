@@ -19,15 +19,15 @@ public class BarbeariaCadastro implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany(mappedBy = "barbearia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BarbeariaServico> servico;
+
     private String razaoSocial;
     private String nomeFantasia;
     private String cnpj;
 
     @OneToOne(cascade = CascadeType.ALL)
     private BarbeariaEndereco endereco;
-
-    @OneToMany(mappedBy = "barbearia", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BarbeariaServico> servicos;
 
     private String email;
     private String telefone;

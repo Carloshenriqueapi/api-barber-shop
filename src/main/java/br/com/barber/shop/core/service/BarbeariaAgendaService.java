@@ -4,39 +4,67 @@ import br.com.barber.shop.infrastructure.api.payload.request.BarbeariaAgendaRequ
 import br.com.barber.shop.infrastructure.api.payload.response.BarbeariaAgendaResponse;
 import br.com.barber.shop.infrastructure.converter.BarbeariaAgendaConverter;
 import br.com.barber.shop.infrastructure.database.entity.BarbeariaAgenda;
+import br.com.barber.shop.infrastructure.database.entity.Profissional;
 import br.com.barber.shop.infrastructure.database.repository.BarbeariaAgendaRepository;
+import br.com.barber.shop.infrastructure.database.repository.ProfissionalRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
-
+@AllArgsConstructor
 @Service
-
+@Slf4j
 public class BarbeariaAgendaService {
 
+
+    private final Function<BarbeariaAgendaRequest, BarbeariaAgenda> barbeariaAgendaConverter;
+    private final BarbeariaAgendaConverter barbeariaAgendaConverterInstance;
+    private final ProfissionalRepository profissionalRepository;
     private final BarbeariaAgendaRepository barbeariaAgendaRepository;
-    private final BarbeariaAgendaConverter barbeariaAgendaConverter;
 
-    public BarbeariaAgendaService(BarbeariaAgendaRepository barbeariaAgendaRepository, BarbeariaAgendaConverter barbeariaAgendaConverter) {
-        this.barbeariaAgendaRepository = barbeariaAgendaRepository;
-        this.barbeariaAgendaConverter = barbeariaAgendaConverter;
-    }
 
-    public List<BarbeariaAgenda> getAllAgenda() {
-        return barbeariaAgendaRepository.findAll();
+    @Transactional
+    public BarbeariaAgendaResponse createAgenda(BarbeariaAgendaRequest agendaRequest) {
+        log.info("Criando agenda para profissionalId: {}", agendaRequest.profissionalId());
+
+        Profissional profissional = profissionalRepository.findById(agendaRequest.profissionalId())
+                .orElseThrow(() -> {
+                    log.error("Profissional com id {} não encontrado", agendaRequest.profissionalId());
+                    return new EntityNotFoundException("Profissional não encontrado");
+                });
+
+        BarbeariaAgenda agenda = barbeariaAgendaConverter.apply(agendaRequest);
+        agenda.setProfissional(profissional);
+
+        BarbeariaAgenda savedAgenda = barbeariaAgendaRepository.save(agenda);
+        log.info("Agenda criada com sucesso: {}", savedAgenda);
+
+        return barbeariaAgendaConverterInstance.convertToResponse(savedAgenda);
     }
 
     public Optional<BarbeariaAgenda> getBarbeariaById(Long id) {
-        return barbeariaAgendaRepository.findById(id);
+
+        return barbeariaAgendaRepository.findByIdWithProfissional(id);
     }
 
-    public BarbeariaAgendaResponse createAgenda(final BarbeariaAgendaRequest agenda) {
-        BarbeariaAgenda convertedAgenda = barbeariaAgendaConverter.apply(agenda);
-        BarbeariaAgenda savedAgenda = barbeariaAgendaRepository.save(convertedAgenda);
-        return barbeariaAgendaConverter.applyResponse(savedAgenda);
+    public List<BarbeariaAgenda> getAllAgenda() {
+
+        return barbeariaAgendaRepository.findAll();
     }
+
+    public BarbeariaAgendaResponse convertToResponse(BarbeariaAgenda agenda) {
+
+        return barbeariaAgendaConverterInstance.convertToResponse(agenda);
+    }
+
+
+
     public void deleteBarbeariaAgenda(Long id) {
         barbeariaAgendaRepository.deleteById(id);
     }

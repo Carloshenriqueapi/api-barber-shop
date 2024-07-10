@@ -1,8 +1,16 @@
 package br.com.barber.shop.infrastructure.api.payload.request;
 
 public record BarbeariaAgendamentoRequest(
-        String dia,
-        String mes,
-        String ano,
-        String hora){
+        Long agendaId,
+        Long clienteId
+) {
+    public Long getAgendaId() {
+        return agendaId;
+    }
+
+    public Long getClienteId() {
+        return clienteId;
+    }
 }
+
+

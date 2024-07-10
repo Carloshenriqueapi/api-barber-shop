@@ -4,18 +4,21 @@ import br.com.barber.shop.core.service.BarbeariaAgendaService;
 import br.com.barber.shop.infrastructure.api.payload.request.BarbeariaAgendaRequest;
 import br.com.barber.shop.infrastructure.api.payload.response.BarbeariaAgendaResponse;
 import br.com.barber.shop.infrastructure.database.entity.BarbeariaAgenda;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/agenda")
+@RequestMapping("/barbearia_agenda")
 @AllArgsConstructor
 public class BarbeariaAgendaController {
 
@@ -23,39 +26,54 @@ public class BarbeariaAgendaController {
 
     @GetMapping
     public ResponseEntity<List<BarbeariaAgendaResponse>> listarTodos() {
-        List<BarbeariaAgenda> agenda = barbeariaService.getAllAgenda();
-
-        List<BarbeariaAgendaResponse> response = agenda.stream()
-                .map(barbeariaAgenda -> new BarbeariaAgendaResponse(
-                        barbeariaAgenda.getDia(),
-                        barbeariaAgenda.getHora(),
-                        barbeariaAgenda.getMes(),
-                        barbeariaAgenda.getAno()))
+        List<BarbeariaAgenda> agendaList = barbeariaService.getAllAgenda();
+        List<BarbeariaAgendaResponse> response = agendaList.stream()
+                .map(barbeariaService::convertToResponse)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BarbeariaAgendaResponse> getBarbeariaAgendaById(@PathVariable Long id) {
-        Optional<BarbeariaAgenda> agenda = barbeariaService.getBarbeariaById(id);
+    public ResponseEntity<?> getBarbeariaAgendaById(@PathVariable Long id) {
+        Optional<BarbeariaAgenda> agendaOptional = barbeariaService.getBarbeariaById(id);
 
-        return agenda.map(barbeariaAgenda ->
-                ResponseEntity.ok(
-                        new BarbeariaAgendaResponse(
-                                barbeariaAgenda.getDia(),
-                                barbeariaAgenda.getHora(),
-                                barbeariaAgenda.getMes(),
-                                barbeariaAgenda.getAno())
-                )
-        ).orElse(ResponseEntity.notFound().build());
+        if (agendaOptional.isEmpty()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Agenda não encontrada para o ID fornecido");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+
+        BarbeariaAgenda barbeariaAgenda = agendaOptional.get();
+        BarbeariaAgendaResponse response = barbeariaService.convertToResponse(barbeariaAgenda);
+
+        return ResponseEntity.ok(response);
     }
 
+    @PostMapping
+    public ResponseEntity<Map<String, Object>> createAgenda(@RequestBody BarbeariaAgendaRequest agendaRequest) {
+        Long profissionalId = agendaRequest.profissionalId();
+        if (profissionalId == null) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "ID do profissional não pode ser nulo");
+            errorResponse.put("request", agendaRequest);
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
 
-    @PostMapping("/barbearia")
-    public ResponseEntity<BarbeariaAgendaResponse> createAgenda(@RequestBody BarbeariaAgendaRequest agenda) {
-        BarbeariaAgendaResponse response = barbeariaService.createAgenda(agenda);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        try {
+            BarbeariaAgendaResponse agendaResponse = barbeariaService.createAgenda(agendaRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("agenda", agendaResponse));
+        } catch (EntityNotFoundException e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Profissional não encontrado");
+            errorResponse.put("request", agendaRequest);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Erro ao criar agenda");
+            errorResponse.put("request", agendaRequest);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -63,8 +81,7 @@ public class BarbeariaAgendaController {
         barbeariaService.deleteBarbeariaAgenda(id);
         return ResponseEntity.ok().build();
     }
-
- }
+}
 
 
 

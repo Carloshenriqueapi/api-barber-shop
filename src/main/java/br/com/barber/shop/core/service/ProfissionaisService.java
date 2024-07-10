@@ -17,25 +17,24 @@ import java.util.stream.Collectors;
 public class ProfissionaisService {
 
 
+
     private final ProfissionalRepository profissionalRepository;
     private final ProfissionalConverter profissionalConverter;
 
     public List<ProfissionalResponse> getAllProfissional() {
         List<Profissional> profissionais = profissionalRepository.findAll();
-        return profissionais.stream()
-                .map(profissionalConverter::applyResponse)
-                .collect(Collectors.toList());
+        return profissionalConverter.convertToResponseList(profissionais);
     }
 
     public Optional<ProfissionalResponse> getProfissionalById(Long id) {
         Optional<Profissional> profissional = profissionalRepository.findById(id);
-        return profissional.map(profissionalConverter::applyResponse);
+        return profissional.map(profissionalConverter::convertToResponse);
     }
 
     public ProfissionalResponse createProfissional(ProfissionalRequest profissionalRequest) {
         Profissional profissional = profissionalConverter.apply(profissionalRequest);
         Profissional savedProfissional = profissionalRepository.save(profissional);
-        return profissionalConverter.applyResponse(savedProfissional);
+        return profissionalConverter.convertToResponse(savedProfissional);
     }
 
     public void deleteProfissional(Long id) {

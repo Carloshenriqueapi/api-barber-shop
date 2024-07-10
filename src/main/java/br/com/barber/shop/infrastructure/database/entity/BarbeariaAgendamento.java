@@ -1,9 +1,6 @@
 package br.com.barber.shop.infrastructure.database.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Builder
@@ -18,9 +15,17 @@ public class BarbeariaAgendamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String dia;
-    private String mes;
-    private String hora;
-    private String ano;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "agenda_id")
+    private BarbeariaAgenda agenda;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
 
 }
+
+
+
+

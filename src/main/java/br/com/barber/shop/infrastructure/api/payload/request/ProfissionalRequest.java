@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record ProfissionalRequest(
-
+        Long idBarbearia,
         String nome,
         String sobreNome,
         String dataNascimento,
