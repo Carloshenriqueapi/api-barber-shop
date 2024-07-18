@@ -28,7 +28,6 @@ public class BarbeariaAgendaService {
     private final ProfissionalRepository profissionalRepository;
     private final BarbeariaAgendaRepository barbeariaAgendaRepository;
 
-
     @Transactional
     public BarbeariaAgendaResponse createAgenda(BarbeariaAgendaRequest agendaRequest) {
         log.info("Criando agenda para profissionalId: {}", agendaRequest.profissionalId());
@@ -48,22 +47,26 @@ public class BarbeariaAgendaService {
         return barbeariaAgendaConverterInstance.convertToResponse(savedAgenda);
     }
 
-    public Optional<BarbeariaAgenda> getBarbeariaById(Long id) {
+    @Transactional
+    public void atualizarStatus(Long agendaId, String status) {
+        BarbeariaAgenda agenda = barbeariaAgendaRepository.findById(agendaId)
+                .orElseThrow(() -> new RuntimeException("Agenda não encontrada"));
 
+        agenda.setStatus(status);
+        barbeariaAgendaRepository.save(agenda);
+    }
+
+    public Optional<BarbeariaAgenda> getBarbeariaById(Long id) {
         return barbeariaAgendaRepository.findByIdWithProfissional(id);
     }
 
     public List<BarbeariaAgenda> getAllAgenda() {
-
         return barbeariaAgendaRepository.findAll();
     }
 
     public BarbeariaAgendaResponse convertToResponse(BarbeariaAgenda agenda) {
-
         return barbeariaAgendaConverterInstance.convertToResponse(agenda);
     }
-
-
 
     public void deleteBarbeariaAgenda(Long id) {
         barbeariaAgendaRepository.deleteById(id);

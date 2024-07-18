@@ -75,7 +75,27 @@ public class BarbeariaAgendaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+    @PatchMapping("/status")
+    public ResponseEntity<String> atualizarStatus(@RequestBody BarbeariaAgendaRequest request) {
+        try {
+            String mensagem;
+            if ("agendado".equalsIgnoreCase(request.status())) {
+                mensagem = "Horário agendado com sucesso!";
+            } else if ("cancelado".equalsIgnoreCase(request.status())) {
+                mensagem = "Horário cancelado com sucesso!";
+            } else {
+                return ResponseEntity.badRequest().body("Status inválido. Utilize 'agendado' ou 'cancelado'.");
+            }
 
+            barbeariaService.atualizarStatus(request.agendaId(), request.status());
+
+            return ResponseEntity.ok(mensagem);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build(); // Retorna 404 se a entidade não for encontrada
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao processar a requisição");
+        }
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBarbeariaAgenda(@PathVariable Long id) {
         barbeariaService.deleteBarbeariaAgenda(id);
